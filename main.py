@@ -5,4 +5,5 @@ import time
 t = Twitter()
 # t.send('9713036121', 'this is a test')
 
-print t.dms()
+for dm in t.dms():
+	print dm.text
