@@ -5,5 +5,10 @@ import time
 t = Twitter()
 # t.send('9713036121', 'this is a test')
 
-for dm in t.dms():
-	print dm.text
+length = len(t.dms())
+
+while (True):
+	if len(t.dms()) > length:
+		length = len(t.dms())
+		print 'new dm (used to have {}, now has {})'.format(length, len(t.dms()))
+	time.sleep(2)
