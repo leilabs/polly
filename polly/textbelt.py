@@ -1,10 +1,9 @@
 import requests
 
 class Text():
-	def __init__(self, to, body):
-		self.to = to
-		self.body = body
+	def __init__(self):
+		pass
 
-	def request(self):
+	def send(self, to, body):
 		data = { 'number': self.to, 'message': self.body }
-		r = requests.post('http://textbelt.com/text', data = data)
+		r = requests.post('http://textbelt.com/text', data=data)

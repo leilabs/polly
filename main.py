@@ -1,10 +1,8 @@
-from flask import Flask
+from polly.textbelt import Text
+from polly.twitter import Twitter
+import time
 
-app = Flask(__name__)
+t = Twitter()
+# t.send('9713036121', 'this is a test')
 
-@app.route('/')
-def index():
-	return '<h2>polly wants a cracker</h2>'
-
-if __name__ == '__main__':
-	app.run(debug=True, host='0.0.0.0')
+print t.dms()
