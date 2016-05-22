@@ -1,4 +1,4 @@
-import tweepy, requests
+import tweepy, requests, time
 from cowpy import cow
 
 cheese = cow.Milk()
