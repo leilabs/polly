@@ -1,7 +1,7 @@
 import tweepy, requests, time
-from cowpy import cow
+# from cowpy import cow
 
-cheese = cow.Milk()
+# cheese = cow.Milk()
 
 class MyStreamListener(tweepy.StreamListener):
     def __init__(self):
@@ -70,5 +70,5 @@ class MyStreamListener(tweepy.StreamListener):
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
 
-print cheese.milk('Running @MessagePolly...')
+print 'Running @MessagePolly...'
 myStream.userstream()
