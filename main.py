@@ -26,9 +26,8 @@ Hey dude
 
         text = self.message['text']
         inputs = text.split('\n')
-        user = self.message['sender']['screen_name']
+        user = str(self.message['sender']['screen_name'])
 
-        print 'sender: %s' % self.message['sender']['screen_name']
         if user is not 'MessagePolly':
             if len(inputs) < 2:
                 # givem some help
@@ -55,4 +54,5 @@ Hey dude
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
 
+print 'Running Polly...'
 myStream.userstream()
