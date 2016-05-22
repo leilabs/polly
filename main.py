@@ -50,15 +50,13 @@ class MyStreamListener(tweepy.StreamListener):
                     pass
 
     def log(self, m):
-        print "=> %s" % m
+        text = "=> %s" % m
 
-    def dm(self, user, dm):
-        time.sleep(1)
-        try:
-            self.api.send_direct_message(user=user, text=dm)
-        except:
-            self.log('Error: Tried to send "{}..." to {}'.format(dm[0:8], user))
+        file = open("log_" + time.strftime("%m-%d-%Y")+".log", "w")
+        file.write(logtext)
 
+        print logtext
+        file.close()
 
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
