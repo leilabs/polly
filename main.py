@@ -9,18 +9,23 @@ class MyStreamListener(tweepy.StreamListener):
         self.api = tweepy.API(self.auth)
 
     def on_direct_message(self, dm):
-        message = dm._json['direct_message']['text']
+        message = dm._json['direct_message']
+        text = message['text']
 
-        input_array = message.split("\n")
+        input_array = text.split('\n')
 
-        number = input_array[0]
-        text = input_array[1]
+        number, body = input_array[0], input_array[1]
 
-        data = { 'number': number, 'message': text }
+        data = { 'number': number, 'message': body }
         r = requests.post('http://textbelt.com/text', data=data)
 
-        print dm._json['direct_message']['text']
-        print r.text
+        if r.json()['success']:
+        	self.log('Sent "{message}" to {number}'.format(**data))
+        else:
+        	self.log('Failed with Error: {}'.format(r.json()['message']))
+
+    def log(self, m):
+    	print "=> %s" % m
 
 
 MyStreamListener = MyStreamListener()
