@@ -22,13 +22,13 @@ class MyStreamListener(tweepy.StreamListener):
         inputs = text.split('\n')
         user = str(self.message['sender']['screen_name'])
 
-        if user is not 'MessagePolly':
+        if user != 'MessagePolly':
             if len(inputs) < 2:
                 # givem some help
                 self.dm(user, self.example)
             else:
-                data = { 'number': inputs[0], 'message': inputs[1] }
-                print 'sending "{message}" to {number}'.format(**data)
+                data = { 'number': inputs[0], 'message': inputs[1], 'from': user}
+                self.log('Sending "{message}" to {number} from {from}'.format(**data))
                 r = requests.post('http://textbelt.com/text', data=data)
 
                 # check success and throw error if things didn't work out too well
