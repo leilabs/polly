@@ -53,10 +53,10 @@ class MyStreamListener(tweepy.StreamListener):
         text = "=> %s" % m
 
         file = open("log_" + time.strftime("%m-%d-%Y")+".log", "w")
-        file.write(logtext)
-
-        print logtext
+        file.write(text)
         file.close()
+
+        print text
 
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
