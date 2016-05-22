@@ -42,7 +42,7 @@ class MyStreamListener(tweepy.StreamListener):
                     self.dm(user, error)
 
     def log(self, m):
-        logtext = "=> %s" % m
+        logtext = "=> "+time.strftime("%Y-%m-%d %H:%M:%S")+" %s" % m
 
         file = open("log_"+time.strftime("%m-%d-%Y")+".log", "w")
         file.write(logtext)
