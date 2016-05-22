@@ -42,8 +42,13 @@ class MyStreamListener(tweepy.StreamListener):
                     self.dm(user, error)
 
     def log(self, m):
-        print "=> %s" % m
+        logtext = "=> %s" % m
 
+        file = open("log_"+time.strftime("%m-%d-%Y")+".log", "w")
+        file.write(logtext)
+
+        print logtext
+        file.close()
 
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
