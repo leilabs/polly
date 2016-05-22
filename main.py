@@ -6,14 +6,7 @@ class MyStreamListener(tweepy.StreamListener):
         self.auth.set_access_token('734122414158708736-WijNUSxfi85hhqLGnaU8muQqInVugnE', 'PzXToKFTW0qErhvM4WIKerputvx5e0J1EM9aaObn5xNPJ')
         self.api = tweepy.API(self.auth)
 
-        self.example = 'Example:\n\n123456789\nHey dude'
-
-    def dm(self, user, dm):
-        time.sleep(1)
-        try:
-            self.api.send_direct_message(user=user, text=dm)
-        except:
-            self.log('Error: Tried to send "{}..." to {}'.format(dm[0:8], user))
+        self.example = 'Example:\n\n123456789\nThe government is watching us at every moment\n[Canada/Intl]'
 
     def on_direct_message(self, dm):
         self.message = dm._json['direct_message']
@@ -22,33 +15,48 @@ class MyStreamListener(tweepy.StreamListener):
         inputs = text.split('\n')
         user = str(self.message['sender']['screen_name'])
 
-        if user is not 'MessagePolly':
+        if user != 'MessagePolly':
             if len(inputs) < 2:
                 # givem some help
                 self.dm(user, self.example)
+                self.log('Sending help to {}'.format(user))
             else:
-                data = { 'number': inputs[0], 'message': inputs[1] }
-                print 'sending "{message}" to {number}'.format(**data)
-                r = requests.post('http://textbelt.com/text', data=data)
+                data = { 'number': inputs[0], 'message': inputs[1], 'from': user}
+                self.log('Sending "{message}" to {number} from {from}'.format(**data))
+
+                # check if intl, us, or canada
+                if len(inputs) == 2:
+                    r = requests.post('http://textbelt.com/text', data=data)
+                elif inputs[2] is not None:
+                    if inputs[2].lower() == 'canada':
+                        r = requests.post('http://textbelt.com/canada', data=data)
+                    elif inputs[2].lower() == 'intl':
+                        r = requests.post('http://textbelt.com/intl', data=data)
+                    else:
+                        self.log('Error: Unrecognized area: {}'.format(inputs[2]))
+                        self.dm(user, 'Error: Unrecognized area: {}'.format(inputs[2]))
 
                 # check success and throw error if things didn't work out too well
-                if r.json()['success']:
-                    res = 'Your message ({message}) to {number} has been sent succesfully.'.format(**data)
-                    self.log(res)
-                    self.dm(user, res)
-                else:
-                    error = 'Your text didn\'t send. {}'.format(r.json()['message'])
-                    self.log(error)
-                    self.dm(user, error)
+                try:
+                    if r.json()['success']:
+                        res = 'Your message ({message}) to {number} has been sent succesfully.'.format(**data)
+                        self.log(res)
+                        self.dm(user, res)
+                    else:
+                        error = 'Your text didn\'t send. {}'.format(r.json()['message'])
+                        self.log(error)
+                        self.dm(user, error)
+                except:
+                    pass
 
     def log(self, m):
         logtext = "=> "+time.strftime("%Y-%m-%d %H:%M:%S")+" %s" % m
 
         file = open("log_"+time.strftime("%m-%d-%Y")+".log", "w")
         file.write(logtext)
+        file.close()
 
         print logtext
-        file.close()
 
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
