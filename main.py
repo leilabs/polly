@@ -1,4 +1,4 @@
-import time, tweepy, requests
+import tweepy, requests
 from cowpy import cow
 
 cheese = cow.Milk()
@@ -53,7 +53,6 @@ class MyStreamListener(tweepy.StreamListener):
                     pass
 
     def dm(self, user, dm):
-        time.sleep(1)
         try:
             self.api.send_direct_message(user=user, text=dm)
         except:
