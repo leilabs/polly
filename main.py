@@ -8,30 +8,48 @@ class MyStreamListener(tweepy.StreamListener):
         self.auth.set_access_token('734122414158708736-WijNUSxfi85hhqLGnaU8muQqInVugnE', 'PzXToKFTW0qErhvM4WIKerputvx5e0J1EM9aaObn5xNPJ')
         self.api = tweepy.API(self.auth)
 
+        self.example = '''
+Example:
+123456789
+Hey dude
+                        '''
+
+    def dm(self, user, dm):
+        time.sleep(1)
+        try:
+            self.api.send_direct_message(user=user, text=dm)
+        except:
+            self.log('Error: Tried to send "{}..." to {}'.format(dm[0:8], user))
+
     def on_direct_message(self, dm):
         self.message = dm._json['direct_message']
+
         text = self.message['text']
-        print self.message["sender"]["id"]
+        inputs = text.split('\n')
+        user = self.message['sender']['screen_name']
 
-        input_array = text.split('\n')
-        print input_array
-
-        if len(input_array) < 2:
-            self.log("Please format your messages as such:\n123456789\nMessage here!")
-        else:
-            number, body = input_array[0], input_array[1]
-
-            data = { 'number': number, 'message': body }
-            r = requests.post('http://textbelt.com/text', data=data)
-
-            if r.json()['success']:
-                self.log('Sent "{message}" to {number}'.format(**data))
+        print 'sender: %s' % self.message['sender']['screen_name']
+        if user is not 'MessagePolly':
+            if len(inputs) < 2:
+                # givem some help
+                self.dm(user, self.example)
             else:
-                self.log('Failed with Error: {}'.format(r.json()['message']))
+                data = { 'number': inputs[0], 'message': inputs[1] }
+                print 'sending "{message}" to {number}'.format(**data)
+                r = requests.post('http://textbelt.com/text', data=data)
+
+                # check success and throw error if things didn't work out too well
+                if r.json()['success']:
+                    res = 'Your message ({message}) to {number} has been sent succesfully.'.format(**data)
+                    self.log(res)
+                    self.dm(user, res)
+                else:
+                    error = 'Your text didn\'t send. {}'.format(r.json()['message'])
+                    self.log(error)
+                    self.dm(user, error)
 
     def log(self, m):
         print "=> %s" % m
-        self.api.send_direct_message(user=self.message['sender']["id"], text=m)
 
 
 MyStreamListener = MyStreamListener()
