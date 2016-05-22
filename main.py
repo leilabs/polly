@@ -1,6 +1,4 @@
-import time
-import tweepy
-import requests
+import time, tweepy, requests
 
 class MyStreamListener(tweepy.StreamListener):
     def __init__(self):
@@ -8,11 +6,7 @@ class MyStreamListener(tweepy.StreamListener):
         self.auth.set_access_token('734122414158708736-WijNUSxfi85hhqLGnaU8muQqInVugnE', 'PzXToKFTW0qErhvM4WIKerputvx5e0J1EM9aaObn5xNPJ')
         self.api = tweepy.API(self.auth)
 
-        self.example = '''
-Example:
-123456789
-Hey dude
-                        '''
+        self.example = 'Example:\n\n123456789\nHey dude'
 
     def dm(self, user, dm):
         time.sleep(1)
@@ -54,5 +48,5 @@ Hey dude
 MyStreamListener = MyStreamListener()
 myStream = tweepy.Stream(auth=MyStreamListener.api.auth, listener=MyStreamListener)
 
-print 'Running Polly...'
+print 'Running @MessagePolly...'
 myStream.userstream()
