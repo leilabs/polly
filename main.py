@@ -6,7 +6,7 @@ class MyStreamListener(tweepy.StreamListener):
         self.auth.set_access_token('734122414158708736-WijNUSxfi85hhqLGnaU8muQqInVugnE', 'PzXToKFTW0qErhvM4WIKerputvx5e0J1EM9aaObn5xNPJ')
         self.api = tweepy.API(self.auth)
 
-        self.example = 'Example:\n\n123456789\nThe government is watching us at every moment\n[Canada/Intl]'
+        self.example = 'Polly Help:\n\n4253221077\nThe government is watching us at every moment\n[Canada/Intl]'
 
     def on_direct_message(self, dm):
         self.message = dm._json['direct_message']
@@ -48,6 +48,13 @@ class MyStreamListener(tweepy.StreamListener):
                         self.dm(user, error)
                 except:
                     pass
+
+    def dm(self, user, dm):
+        time.sleep(1)
+        try:
+            self.api.send_direct_message(user=user, text=dm)
+        except:
+            self.log('Error: Tried to send "{}..." to {}'.format(dm[0:8], user))
 
     def log(self, m):
         text = "=> " + time.strftime("%Y-%m-%d %H:%M:%S") + ' %s' % m
