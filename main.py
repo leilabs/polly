@@ -22,7 +22,7 @@ class MyStreamListener(tweepy.StreamListener):
                 self.log('Sending help to {}'.format(user))
             else:
                 data = { 'number': inputs[0], 'message': inputs[1], 'from': user}
-                self.log('Sending "{message}" to {number} from {from}'.format(**data))
+                self.log('Sending "{message}" to {number} from @{from}'.format(**data))
 
                 # check if intl, us, or canada
                 if len(inputs) == 2:
